@@ -14,6 +14,7 @@ interface Service {
   details: string[];
   color: string;
   textColor: string;
+  image: string;
 }
 
 interface CardProps {
@@ -24,55 +25,64 @@ interface CardProps {
 // --- Data for the cards ---
 const services: Service[] = [
   {
-    title: 'Brand Strategy',
-    description: "It's the core of your company's identity.",
+    title: 'Brand Identity',
+    description: "Crafting a unique and memorable brand presence that resonates with your audience.",
     details: [
-      'Research & Insights',
-      'Unique Value Proposition',
+      'Logo & Visual System',
+      'Brand Guidelines',
+      'Story & Messaging',
     ],
-    color: '#d4e3ff', // Light Blue
+    color: '#d4e3ff',
     textColor: '#0f172a',
+    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80', // branding/identity
   },
   {
-    title: 'Visual Identity',
-    description: 'Visual identity is the unique visual language of your brand, creating memorable impressions and emotional connections with your audience.',
+    title: 'MVP Building',
+    description: "Rapidly building and launching your Minimum Viable Product to validate your idea.",
     details: [
-      'Logotype, Typography & Colour',
-      'Illustration & 3D',
-      'Photography Art Direction',
-      'Brand Book & Guidelines',
-      'Animations',
+      'Lean Product Strategy',
+      'Prototype & MVP Development',
+      'User Feedback Loops',
     ],
-    color: '#ffebd4', // Light Orange
+    color: '#ffebd4',
     textColor: '#0f172a',
+    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80', // mvp/building
   },
   {
-    title: 'Website',
-    description: 'Our website design services blend innovation and creativity to deliver user-centric solutions that elevate your brand and engage your audience.',
+    title: 'Web Design',
+    description: "Designing beautiful, functional, and responsive websites for your business.",
     details: [
-        'UX Design',
-        'User Testing',
-        'Product Prototype',
-        'Mobile UI',
-        'Software UI design',
+      'UI/UX Design',
+      'Responsive Layouts',
+      'Web Animation',
     ],
-    color: '#ffe0e0', // Light Red
+    color: '#ffe0e0',
     textColor: '#0f172a',
+    image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80', // web design
   },
   {
-    title: 'Product',
-    description: 'Our product design services focus on creating intuitive and aesthetically pleasing products that resonate with your audience and stand out in the market.',
+    title: 'Mobile Apps',
+    description: "Creating intuitive and engaging mobile experiences for iOS and Android.",
     details: [
-        'UX Design',
-        'User Testing',
-        'Product Prototype',
-        'Mobile UI',
-        'Software UI design',
-        'Web app design',
-        'Interaction design',
+      'iOS & Android',
+      'Cross-platform',
+      'App Store Launch',
     ],
-    color: '#d1f7d1', // Light Green
+    color: '#d1f7d1',
     textColor: '#0f172a',
+    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80', // mobile apps
+  },
+  {
+    title: 'Revamps',
+    description: "Redesigns, restructures, and re-architecture to modernize and optimize your product.",
+    details: [
+      'UI/UX Redesign',
+      'Code Refactoring',
+      'Performance Optimization',
+    ],
+    color: '#e0e7ff',
+    textColor: '#0f172a',
+    image: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3fd9?auto=format&fit=crop&w=600&q=80', // revamp
   },
 ];
 
@@ -80,28 +90,30 @@ const services: Service[] = [
 // --- The Card Component ---
 // This component represents a single card in the stack.
 const Card = React.forwardRef<HTMLDivElement, CardProps>(({ service, index }, ref) => (
-  <div ref={ref} className="h-screen w-full sticky top-0 overflow-hidden">
+  <div ref={ref} className="h-[60vh] w-full sticky top-0 overflow-hidden">
     <div 
-      className="w-full h-full flex flex-col justify-between p-8 md:p-12 lg:p-20"
+      className="w-full h-full grid grid-cols-2 p-8 md:p-12 lg:p-20"
       style={{ backgroundColor: service.color, color: service.textColor }}
     >
-      {/* Top section of the card */}
-      <div className="flex-grow flex items-start">
+      {/* Left: Text content */}
+      <div className="flex flex-col justify-between h-full flex-1 pr-8">
         <div>
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-none">
             {service.title}
           </h2>
           <p className="mt-4 text-lg md:text-xl max-w-2xl">{service.description}</p>
         </div>
+        <div className="flex-shrink-0 flex justify-end text-right mt-8">
+          <ul className="text-md md:text-lg">
+            {service.details.map((detail: string, i: number) => (
+              <li key={i}>{detail}</li>
+            ))}
+          </ul>
+        </div>
       </div>
-      
-      {/* Bottom section of the card */}
-      <div className="flex-shrink-0 flex justify-end text-right">
-        <ul className="text-md md:text-lg">
-          {service.details.map((detail: string, i: number) => (
-            <li key={i}>{detail}</li>
-          ))}
-        </ul>
+      {/* Right: Image */}
+      <div className="flex items-center justify-center h-full flex-shrink-0" style={{ width: '200px' }}>
+        <img src={service.image} alt={service.title + ' image'} className="max-h-[80%] max-w-full object-contain" />
       </div>
     </div>
   </div>
@@ -155,36 +167,20 @@ export default function StackedCards() {
   }, []);
 
   return (
-    <>
-      <div className="bg-gray-100 font-sans">
-        {/* This is a simple header. The animation container starts below it. */}
-        <header className="p-4 text-center text-gray-500">
-          <h1 className="text-2xl font-bold">Scroll Down To See The Animation</h1>
-          <p>A card stacking animation with React, GSAP & Tailwind CSS</p>
-        </header>
-
-        {/* This is the main container for our animation */}
-        <div ref={containerRef}>
-          {services.map((service, index) => (
-            <Card
-              key={index}
-              service={service}
-              ref={(el: HTMLDivElement | null) => {
-                cardRefs.current[index] = el;
-              }}
-              index={index}
-            />
-          ))}
-        </div>
-
-        {/* This is a simple footer to show the end of the scroll area. */}
-        <footer className="h-screen flex items-center justify-center bg-gray-900 text-white">
-          <div className="text-center">
-            <h2 className="text-4xl font-bold">End of Section</h2>
-            <p>The animation is complete.</p>
-          </div>
-        </footer>
+    <div className="bg-gray-100 font-sans">
+      {/* Main container for our animation */}
+      <div ref={containerRef}>
+        {services.map((service, index) => (
+          <Card
+            key={index}
+            service={service}
+            ref={(el: HTMLDivElement | null) => {
+              cardRefs.current[index] = el;
+            }}
+            index={index}
+          />
+        ))}
       </div>
-    </>
+    </div>
   );
 }
